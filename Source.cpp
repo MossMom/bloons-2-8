@@ -18,6 +18,18 @@ struct point {
     int y;
 };
 
+class bloon {
+private:
+    int xpos;
+    int ypos;
+    int currPath;
+public:
+    bloon(int x, int y);
+    void move(vector<point>myPath);
+    void draw(sf::RenderWindow& window);
+};
+
+int ticker = 0;
 
 int main()
 {
@@ -137,7 +149,6 @@ int main()
     p38.x = 250;
     p38.y = 900;
 
-
     //set up vector to hold path points, push path points into it
     vector <point> pathPoints;
     pathPoints.push_back(p1);
@@ -178,20 +189,21 @@ int main()
     pathPoints.push_back(p36);
     pathPoints.push_back(p37);
     pathPoints.push_back(p38);
+    
 
     // create game window
     sf::RenderWindow window(sf::VideoMode(780, 900), "Bloons");
-
-    //balloon variables
-    float xpos = 250; 
-    float ypos = 950; //start off screen
-    sf::CircleShape bloon(25);
-    bloon.setFillColor(sf::Color(250, 0, 0));
-    bloon.setPosition(xpos, ypos);
-    int currPath = 0; //begin heading towards the first point in the pathing vector
-    int ticker = 0;
-
-
+    
+    //make da bloon
+    bloon b1(250, 950);
+    bloon b2(250, 950+50);
+    bloon b3(250, 950+100);
+    bloon b4(250, 950+150);
+    bloon b5(250, 950+200);
+    bloon b6(250, 950+250);
+    bloon b7(250, 950+300);
+    bloon b8(250, 950+350);
+    bloon b9(250, 950+400);
 
     // GAME LOOP----------------------------------------------------------------------------------------
     while (window.isOpen())
@@ -204,44 +216,68 @@ int main()
                 window.close();
         }
 
-
-
-        //pathing algorithm*******************************************************************
-        //this works by moving the x and y coord of our baloon towards the (x,y) of the next point in the path
-        //the path is stored as a series of points in a vector called "pathPoints"
-
         ticker++; //slow dem bloons down
         if (ticker % 30 == 0) { //make 30 bigger to slow down baloon more
 
-            //first check if you're at the turning point, move to next point if you are
-            if ((xpos == pathPoints[currPath].x) && (ypos == pathPoints[currPath].y))
-                if (currPath < pathPoints.size() - 1) //don't walk off end of vector!
-                    currPath++; //iterate to next point
-
-            //if not there yet, move our x towards x position of next junction
-            if (xpos < pathPoints[currPath].x)
-                xpos += 1;
-            if (xpos > pathPoints[currPath].x)
-                xpos -= 1;
-            //and move our y towards y position of next junction
-            if (ypos < pathPoints[currPath].y)
-                ypos += 1;
-            if (ypos > pathPoints[currPath].y)
-                ypos -= 1;
-        }//end pathing algorithm**************************************************************
-
-
-        //move da bloon
-        bloon.setPosition(xpos, ypos);
-
-        // Render section----------------------------------------------------------------
-        window.clear(sf::Color::Black);
-        window.draw(bloon);
-
+            b1.move(pathPoints);
+            b2.move(pathPoints);
+            b3.move(pathPoints);
+            b4.move(pathPoints);
+            b5.move(pathPoints);
+            b6.move(pathPoints);
+            b7.move(pathPoints);
+            b8.move(pathPoints);
+            b9.move(pathPoints);
+            //move more here
+        }
         
-
+        // Render section----------------------------------------------------------------
+        //window.clear(sf::Color::Black);
+        b1.draw(window);
+        b2.draw(window);
+        b3.draw(window);
+        b4.draw(window);
+        b5.draw(window);
+        b6.draw(window);
+        b7.draw(window);
+        b8.draw(window);
+        b9.draw(window);
         window.display();
     }
 
     return 0;//buh bye
+}
+
+bloon::bloon(int x, int y) {
+    xpos = x;
+    ypos = y;
+    currPath = 0;
+}
+
+
+//note for part 2: I called my vector by a different name here to show this could work with any vector of points
+void bloon::move(vector<point>myPath) {
+    if ((xpos == myPath[currPath].x) && (ypos == myPath[currPath].y))
+        if (currPath < myPath.size() - 1) //don't walk off end of vector!
+            currPath++; //iterate to next point
+
+    //if not there yet, move our x towards x position of next junction
+    if (xpos < myPath[currPath].x)
+        xpos += 1;
+    if (xpos > myPath[currPath].x)
+        xpos -= 1;
+    //and move our y towards y position of next junction
+    if (ypos < myPath[currPath].y)
+        ypos += 1;
+    if (ypos > myPath[currPath].y)
+        ypos -= 1;
+
+}
+
+
+void bloon::draw(sf::RenderWindow& window) { //passes a POINTER to the gamescreen
+    sf::CircleShape baloon(25);
+    baloon.setFillColor(sf::Color(250, 0, 0));
+    baloon.setPosition(xpos, ypos);
+    window.draw(baloon);//draw to gamescreen
 }
