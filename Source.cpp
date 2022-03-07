@@ -195,15 +195,12 @@ int main()
     sf::RenderWindow window(sf::VideoMode(780, 900), "Bloons");
     
     //make da bloon
-    bloon b1(250, 950);
-    bloon b2(250, 950+50);
-    bloon b3(250, 950+100);
-    bloon b4(250, 950+150);
-    bloon b5(250, 950+200);
-    bloon b6(250, 950+250);
-    bloon b7(250, 950+300);
-    bloon b8(250, 950+350);
-    bloon b9(250, 950+400);
+    vector<bloon*> BloonBag;
+    vector<bloon*>::iterator iter;
+    for (int i = 0; i < 20; i++) {
+        bloon* newBloon = new bloon(250, 950 + (i * 50));
+        BloonBag.push_back(newBloon);
+    }
 
     // GAME LOOP----------------------------------------------------------------------------------------
     while (window.isOpen())
@@ -219,30 +216,16 @@ int main()
         ticker++; //slow dem bloons down
         if (ticker % 30 == 0) { //make 30 bigger to slow down baloon more
 
-            b1.move(pathPoints);
-            b2.move(pathPoints);
-            b3.move(pathPoints);
-            b4.move(pathPoints);
-            b5.move(pathPoints);
-            b6.move(pathPoints);
-            b7.move(pathPoints);
-            b8.move(pathPoints);
-            b9.move(pathPoints);
+            for (iter = BloonBag.begin(); iter != BloonBag.end(); iter++)
+                (*iter)->move(pathPoints);
             //move more here
         }
         
         // Render section----------------------------------------------------------------
         // stinky doodoo fart
         window.clear(sf::Color::Black);
-        b1.draw(window);
-        b2.draw(window);
-        b3.draw(window);
-        b4.draw(window);
-        b5.draw(window);
-        b6.draw(window);
-        b7.draw(window);
-        b8.draw(window);
-        b9.draw(window);
+        for (iter = BloonBag.begin(); iter != BloonBag.end(); iter++)
+            (*iter)->draw(window);
         window.display();
     }
 
@@ -277,7 +260,7 @@ void bloon::move(vector<point>myPath) {
 
 
 void bloon::draw(sf::RenderWindow& window) { //passes a POINTER to the gamescreen
-    sf::CircleShape baloon(25);
+    sf::CircleShape baloon(15);
     baloon.setFillColor(sf::Color(250, 0, 0));
     baloon.setPosition(xpos, ypos);
     window.draw(baloon);//draw to gamescreen
