@@ -232,7 +232,8 @@ int main()
         }
         
         // Render section----------------------------------------------------------------
-        //window.clear(sf::Color::Black);
+        // stinky doodoo fart
+        window.clear(sf::Color::Black);
         b1.draw(window);
         b2.draw(window);
         b3.draw(window);
